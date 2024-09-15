@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: order-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all   # Ensure all replicas acknowledge the message
+      retries: 3  # Number of retries in case of failure
+      batch-size: 16384 # Batch size in bytes
+      buffer-memory: 33554432 #Buffer size in memory
+      properties:
+        linger.ms: 1  # Time to wait before sending a batch
+        security.protocol: PLAINTEXT # Define security protocol (PLAINTEXT or SSL)
+    template:
+      default-topic: order-events
+
+order:
+  event:
+    topicName: order-events
